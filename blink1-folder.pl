@@ -3,7 +3,6 @@
 use strict;
 use warnings;
 
-use Mail::IMAPClient;
 use Time::HiRes qw(usleep);
 use POSIX qw(strftime);
 use File::Find;
