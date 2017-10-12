@@ -91,21 +91,26 @@ while (1) {
 
 	# count unread
 	while (1) {
+		dprint("loop");
+
 		my @unseen = $imap->unseen();
 
 		# set colour according to unseen message classes
 		if ($unseen[0]) {
+			dprint("oh! something");
 			my @headers = $imap->fetch(join(",", @unseen), "RFC822.HEADER") or warn and last;
 			my $headers = join("", @headers);
 			$headers =~ s/\r\n[ \t]/ /sg; # unfold folded header fields to single-line fields
 
 			foreach my $a (@actions) {
 				if ($headers =~ /$a->{"pattern"}/mi) {
+					dprint("oh! a " + $a->{"pattern"});
 					set_blink_string($a->{"action"});
 					last;
 				}
 			}
 		} else {
+			dprint("nothing :-(");
 			set_blink_string("--off");
 		}
 
