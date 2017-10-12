@@ -13,7 +13,7 @@ my $imap_ssl = 1;
 my $imap_user = "yourusername";
 my $imap_password = "yourpassword";
 
-my $blink1tool = "./blink1-tool";
+my $blink1tool = "blink1-tool";
 my $error_string = "--rgb 400000";
 
 my @actions = (
