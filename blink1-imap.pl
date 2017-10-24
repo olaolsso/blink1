@@ -6,12 +6,16 @@ use warnings;
 use Mail::IMAPClient;
 use Time::HiRes qw(usleep);
 use POSIX qw(strftime);
+use Config::Simple;
 
-my $imap_server = "imap.gmail.com";
-my $imap_port = 993;
-my $imap_ssl = 1;
-my $imap_user = "yourusername";
-my $imap_password = "yourpassword";
+
+my $cfg = new Config::Simple('imap.ini');
+
+my $imap_server = $cfg->param('server');
+my $imap_port = $cfg->param('port');
+my $imap_ssl = $cfg->param('ssl');
+my $imap_user = $cfg->param('user');
+my $imap_password = $cfg->param('password');
 
 my $blink1tool = "blink1-tool";
 my $error_string = "--rgb 400000";
