@@ -6,14 +6,18 @@ use warnings;
 use Mail::IMAPClient;
 use Time::HiRes qw(usleep);
 use POSIX qw(strftime);
+use Config::Simple;
 
-my $imap_server = "imap.gmail.com";
-my $imap_port = 993;
-my $imap_ssl = 1;
-my $imap_user = "yourusername";
-my $imap_password = "yourpassword";
 
-my $blink1tool = "./blink1-tool";
+my $cfg = new Config::Simple('imap.ini');
+
+my $imap_server = $cfg->param('server');
+my $imap_port = $cfg->param('port');
+my $imap_ssl = $cfg->param('ssl');
+my $imap_user = $cfg->param('user');
+my $imap_password = $cfg->param('password');
+
+my $blink1tool = "blink1-tool";
 my $error_string = "--rgb 400000";
 
 my @actions = (
@@ -91,21 +95,26 @@ while (1) {
 
 	# count unread
 	while (1) {
+		dprint("loop");
+
 		my @unseen = $imap->unseen();
 
 		# set colour according to unseen message classes
 		if ($unseen[0]) {
+			dprint("oh! something");
 			my @headers = $imap->fetch(join(",", @unseen), "RFC822.HEADER") or warn and last;
 			my $headers = join("", @headers);
 			$headers =~ s/\r\n[ \t]/ /sg; # unfold folded header fields to single-line fields
 
 			foreach my $a (@actions) {
 				if ($headers =~ /$a->{"pattern"}/mi) {
+					dprint("oh! a " + $a->{"pattern"});
 					set_blink_string($a->{"action"});
 					last;
 				}
 			}
 		} else {
+			dprint("nothing :-(");
 			set_blink_string("--off");
 		}
 
